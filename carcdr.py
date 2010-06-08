@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from itertools import imap, islice
+
 def car(iter):
     assert isinstance(iter, Seq)
     return iter.car()
@@ -48,8 +50,13 @@ class Seq(object):
         return ConsIterator(self._head)
 
     def __repr__(self):
-        # XXX use islice
-        return "Seq(%r)" % list(self.__iter__())
+        iterable = self.__iter__()
+        lstr = ", ".join(imap(str, islice(iterable, 10)))
+        try:
+            next(iterable)
+            return "Seq([%s, ...])" % lstr
+        except StopIteration:
+            return "Seq([%s])" % lstr
 
     def car(self):
         return self._head.get()[0]
