@@ -49,6 +49,13 @@ class Seq(object):
     def __iter__(self):
         return ConsIterator(self._head)
 
+    def __nonzero__(self):
+        try:
+            self._head.get()
+            return True
+        except StopIteration:
+            return False
+
     def __repr__(self):
         iterable = self.__iter__()
         lstr = ", ".join(imap(str, islice(iterable, 10)))
@@ -62,9 +69,12 @@ class Seq(object):
         return self._head.get()[0]
 
     def cdr(self):
-        s = self.__new__(type(self))
-        s._head = self._head.get()[1]
-        return s
+        try:
+            s = self.__new__(type(self))
+            s._head = self._head.get()[1]
+            return s
+        except StopIteration:
+            pass
 
 def thegen():
     for i in range(1, 5):
@@ -80,3 +90,11 @@ pr(car(s))
 pr(car(s))
 pr(cdr(s))
 pr(list(cdr(s)))
+
+def test_huge_sum():
+    s = Seq(xrange(1000000))
+    the_sum = 0
+    while s:
+        the_sum += car(s)
+        s = cdr(s)
+    print("the sum", the_sum)
