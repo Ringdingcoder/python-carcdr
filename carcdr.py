@@ -66,7 +66,10 @@ class Seq(object):
             return "Seq([%s])" % lstr
 
     def car(self):
-        return self._head.get()[0]
+        try:
+            return self._head.get()[0]
+        except StopIteration:
+            pass
 
     def cdr(self):
         try:
@@ -74,7 +77,7 @@ class Seq(object):
             s._head = self._head.get()[1]
             return s
         except StopIteration:
-            pass
+            return self
 
 def thegen():
     for i in range(1, 5):
