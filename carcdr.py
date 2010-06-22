@@ -10,6 +10,12 @@ def cdr(iter):
     assert isinstance(iter, Seq)
     return iter.cdr()
 
+def cons(p1, p2):
+    assert isinstance(p2, Seq)
+    seq = Seq.__new__(Seq)
+    seq._head = ConsCell(p1, p2)
+    return seq
+
 class SeqConsCell(object):
     __slots__ = ["_realized", "_iterable", "val"]
 
@@ -25,6 +31,16 @@ class SeqConsCell(object):
         if not self._realized:
             self._realize()
         return self.val
+
+class ConsCell(object):
+    __slots__ = ["_car", "_cdr"]
+
+    def __init__(self, car, cdr):
+        self._car = car
+        self._cdr = cdr
+
+    def get(self):
+        return self._car, self._cdr._head
 
 class ConsIterator(object):
     __slots__ = ["_head"]
@@ -101,3 +117,8 @@ def test_huge_sum():
         the_sum += car(s)
         s = cdr(s)
     print("the sum", the_sum)
+
+sc = cdr(s)
+pr(cons(0, cons(1, sc)))
+pr(sc)
+pr(cons(0, cons(1, sc)))
