@@ -10,7 +10,7 @@ def cdr(iter):
     assert isinstance(iter, Seq)
     return iter.cdr()
 
-class ConsCell(object):
+class SeqConsCell(object):
     __slots__ = ["_realized", "_iterable", "val"]
 
     def __init__(self, iterable):
@@ -18,7 +18,7 @@ class ConsCell(object):
         self._iterable = iterable
 
     def _realize(self):
-        self.val = (next(self._iterable), ConsCell(self._iterable))
+        self.val = (next(self._iterable), SeqConsCell(self._iterable))
         self._realized = True
 
     def get(self):
@@ -44,7 +44,7 @@ class Seq(object):
     __slots__ = ["_head"]
 
     def __init__(self, iterable):
-        self._head = ConsCell(iter(iterable))
+        self._head = SeqConsCell(iter(iterable))
 
     def __iter__(self):
         return ConsIterator(self._head)
