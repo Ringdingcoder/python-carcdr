@@ -92,31 +92,3 @@ class Seq(object):
             return s
         except StopIteration:
             return self
-
-def thegen():
-    for i in range(1, 5):
-        print "gen", i
-        yield i
-
-s = Seq(thegen())
-
-def pr(s):
-    print repr(s)
-
-pr(car(s))
-pr(car(s))
-pr(cdr(s))
-pr(list(cdr(s)))
-
-def test_huge_sum(s):
-    s = Seq(xrange(1000000))
-    the_sum = 0
-    while s:
-        the_sum += car(s)
-        s = cdr(s)
-    print "the sum", the_sum
-
-sc = cdr(s)
-pr(cons(0, cons(1, sc)))
-pr(sc)
-pr(cons(0, cons(1, sc)))
